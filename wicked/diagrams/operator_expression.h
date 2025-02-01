@@ -5,7 +5,7 @@
 
 #include "helpers/algebra.hpp"
 #include "operator_product.h"
-#include "wicked-def.h"
+#include "wickd-def.h"
 
 /// A class to represent operators
 class OperatorExpression

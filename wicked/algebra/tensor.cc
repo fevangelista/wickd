@@ -6,7 +6,7 @@
 #include "helpers/orbital_space.h"
 
 #include "tensor.h"
-#include "wicked-def.h"
+#include "wickd-def.h"
 
 Tensor::Tensor(const std::string &label, const std::vector<Index> &lower,
                const std::vector<Index> &upper, SymmetryType symmetry)

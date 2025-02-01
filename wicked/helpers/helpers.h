@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "wicked-def.h"
+#include "wickd-def.h"
 
 // Returns a comma separated list of the indices
 std::string join(const std::vector<std::string> &svec,

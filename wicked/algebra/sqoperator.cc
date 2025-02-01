@@ -3,7 +3,7 @@
 #include "helpers/combinatorics.h"
 #include "helpers/helpers.h"
 #include "index.h"
-#include "wicked-def.h"
+#include "wickd-def.h"
 
 SQOperator::SQOperator(SQOperatorType type, Index index)
     : operator_(std::make_pair(type, index)) {}

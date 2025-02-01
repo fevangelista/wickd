@@ -1,4 +1,4 @@
-import wicked as w
+import wickd as w
 
 
 def print_comparison(val, val2):
@@ -44,7 +44,7 @@ def test_energy():
         for eq in mbeq[rank]:
             print(eq)
 
-    for eq in mbeq['oo|vv']:
+    for eq in mbeq["oo|vv"]:
         print(eq.compile("einsum"))
     # assert len(mbeq[0]) == 1
     # comp = mbeq[0][0].compile("einsum")

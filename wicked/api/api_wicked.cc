@@ -18,8 +18,8 @@ void export_OperatorExpression(nb::module_ &m);
 void export_WickTheorem(nb::module_ &m);
 void export_rational(nb::module_ &m);
 
-NB_MODULE(_wicked, m) {
-  m.doc() = "Wicked python interface";
+NB_MODULE(_wickd, m) {
+  m.doc() = "wickd python interface";
   export_rational(m);
   export_combinatorics(m);
   export_OrbitalSpaceInfo(m);

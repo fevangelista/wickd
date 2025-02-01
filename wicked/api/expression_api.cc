@@ -5,7 +5,7 @@
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
 
-#include "../wicked/algebra/expression.h"
+#include "../wickd/algebra/expression.h"
 
 namespace nb = nanobind;
 using namespace nanobind::literals;

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "index.h"
-#include "wicked-def.h"
+#include "wickd-def.h"
 
 /// Enums
 enum class SymmetryType { Symmetric, Antisymmetric, Nonsymmetric };

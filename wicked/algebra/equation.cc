@@ -7,7 +7,7 @@
 #include "helpers/helpers.h"
 #include "sqoperator.h"
 #include "tensor.h"
-#include "wicked-def.h"
+#include "wickd-def.h"
 
 Equation::Equation(const SymbolicTerm &lhs, const SymbolicTerm &rhs,
                    scalar_t factor)

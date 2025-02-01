@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "wicked-def.h"
+#include "wickd-def.h"
 
 /**
  * @brief A class to represent orbital indices.

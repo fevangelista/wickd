@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "../helpers/product.hpp"
-#include "../wicked-def.h"
+#include "../wickd-def.h"
 #include "index.h"
 #include "sqoperator.h"
 #include "tensor.h"

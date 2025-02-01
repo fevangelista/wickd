@@ -3,7 +3,7 @@
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
 
-#include "../wicked/algebra/index.h"
+#include "../wickd/algebra/index.h"
 
 namespace nb = nanobind;
 using namespace nanobind::literals;

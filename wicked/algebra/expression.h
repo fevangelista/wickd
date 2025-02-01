@@ -7,7 +7,7 @@
 #include "helpers/algebra.hpp"
 #include "index.h"
 #include "term.h"
-#include "wicked-def.h"
+#include "wickd-def.h"
 
 /// A class to represent an algebraic expression
 class Expression : public Algebra<Expression, SymbolicTerm, scalar_t> {
@@ -62,7 +62,7 @@ public:
 std::ostream &operator<<(std::ostream &os, const Expression &sum);
 
 /// The syntax used to input a tensor expression
-enum class TensorSyntax { Wicked, TCE };
+enum class TensorSyntax { wickd, TCE };
 
 ///// Create a sum from a string
 Expression make_expression(const std::string &s, SymmetryType symmetry);

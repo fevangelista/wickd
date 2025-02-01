@@ -2,11 +2,11 @@
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
 
-#include "../wicked/diagrams/contraction.h"
-#include "../wicked/diagrams/operator.h"
-#include "../wicked/diagrams/operator_expression.h"
-#include "../wicked/diagrams/operator_product.h"
-#include "../wicked/diagrams/wick_theorem.h"
+#include "../wickd/diagrams/contraction.h"
+#include "../wickd/diagrams/operator.h"
+#include "../wickd/diagrams/operator_expression.h"
+#include "../wickd/diagrams/operator_product.h"
+#include "../wickd/diagrams/wick_theorem.h"
 
 namespace nb = nanobind;
 using namespace nanobind::literals;

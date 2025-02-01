@@ -1,12 +1,12 @@
 def test_import():
-    import wicked
+    import wickd
 
 
 def test_orbital_space():
-    import wicked
+    import wickd
 
-    wicked.reset_space()
-    assert wicked.num_spaces() == 0
+    wickd.reset_space()
+    assert wickd.num_spaces() == 0
 
 
 if __name__ == "__main__":

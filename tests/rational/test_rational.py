@@ -1,4 +1,4 @@
-import wicked as w
+import wickd as w
 import pytest
 
 

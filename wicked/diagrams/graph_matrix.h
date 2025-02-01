@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "../wicked-def.h"
+#include "../wickd-def.h"
 
 /// A class to keep track of creation and annilation operators,
 /// and their contractions, which we call a graph matrix.

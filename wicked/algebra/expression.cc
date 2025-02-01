@@ -248,7 +248,7 @@ Expression make_operator_expr(const std::string &label,
 
 Expression make_expression(const std::string &s, SymmetryType symmetry) {
 
-  TensorSyntax syntax = TensorSyntax::Wicked;
+  TensorSyntax syntax = TensorSyntax::wickd;
   Expression sum;
 
   // if we have an empty string, do not parse it (the code below would interpret
@@ -257,7 +257,7 @@ Expression make_expression(const std::string &s, SymmetryType symmetry) {
     return sum;
 
   std::regex factor_re, operator_re, normal_ordered_re, tensor_re;
-  if (syntax == TensorSyntax::Wicked) {
+  if (syntax == TensorSyntax::wickd) {
     tensor_re = std::regex(R"(([a-zA-Z0-9]+\^\{[\w,\d]*\}_\{[\w,\d]*\}))");
     operator_re = std::regex(R"([ab]([+-]{1,1})\(([\w\d]*)\))");
     factor_re = std::regex(R"(^\s*([+-]?\d*\/?\d*)\s*)");

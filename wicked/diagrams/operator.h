@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "graph_matrix.h"
-#include "wicked-def.h"
+#include "wickd-def.h"
 
 /// A class to represent operators
 class Operator {

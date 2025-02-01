@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "../wicked-def.h"
+#include "../wickd-def.h"
 #include "graph_matrix.h"
 #include "helpers/product.hpp"
 
