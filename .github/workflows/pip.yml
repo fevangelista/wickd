@@ -41,5 +41,10 @@ jobs:
           ls -l wickd
           ls -R $(python -c "import site; print(site.getsitepackages()[0])")/wickd
 
+      - name: Verify Python path
+        run: |
+          python -c "import sys; print(sys.path)"
+          python -c "import wickd; print(wickd.__file__)"
+
       - name: Test
         run: python -m pytest
