@@ -1,5 +1,5 @@
 # import C++ code
-from ._wickd import *
+from wickd._wickd import *
 
 # import Python functions
-from .utils import *
+from wickd.utils import *
