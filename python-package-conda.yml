@@ -22,7 +22,7 @@
 #     - name: Setup Conda
 #       uses: conda-incubator/setup-miniconda@v3
 #       with:
-#         activate-environment: wicked
+#         activate-environment: wickd
 #         environment-file: environment.yml
 #         channels: conda-forge
 #         show-channel-urls: true
@@ -30,9 +30,9 @@
 #         auto-activate-base: false
 #         add-pip-as-python-dependency: true
 
-#     - name: Install wicked
+#     - name: Install wickd
 #       run: |
-#         cd $HOME/work/wicked/wicked
+#         cd $HOME/work/wickd/wickd
 #         echo '[CMakeBuild]' > setup.cfg
 #         echo 'code_coverage=ON' >> setup.cfg
 #         cat setup.cfg

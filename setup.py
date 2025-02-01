@@ -40,9 +40,7 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
-        extdir = os.path.join(
-            os.path.dirname(self.get_ext_fullpath(ext.name)), "wicked"
-        )
+        extdir = os.path.join(os.path.dirname(self.get_ext_fullpath(ext.name)), "wickd")
         extdir = os.path.abspath(extdir)
 
         print(f"    CODE_COVERAGE = {str(self.code_coverage).upper()}")
@@ -83,18 +81,18 @@ class CMakeBuild(build_ext):
 
 
 setup(
-    name="wicked",
+    name="wickd",
     version="1.0.1",
     author="Francesco A. Evangelista",
     description="",
     long_description="",
-    # tell setuptools to look for any packages under 'wicked'
-    packages=find_packages("wicked"),
-    # tell setuptools that all packages will be under the 'wicked' directory
+    # tell setuptools to look for any packages under 'wickd'
+    packages=find_packages("wickd"),
+    # tell setuptools that all packages will be under the 'wickd' directory
     # and nowhere else
     package_dir={"": "."},
-    # add an extension module named 'wicked' to the package 'wicked'
-    ext_modules=[CMakeExtension("wicked")],
+    # add an extension module named 'wickd' to the package 'wickd'
+    ext_modules=[CMakeExtension("wickd")],
     # add custom build_ext command
     cmdclass=dict(build_ext=CMakeBuild),
     test_suite="tests",
