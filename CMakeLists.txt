@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15...3.26)
 
-project(wicked LANGUAGES CXX)
+project(wickd LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 
 if (NOT SKBUILD)
@@ -34,20 +34,20 @@ find_package(Python 3.8
 # Import nanobind through CMake's find_package mechanism
 find_package(nanobind CONFIG REQUIRED)
 
-include_directories(wicked)
-include_directories(wicked/algebra)
-include_directories(wicked/diagrams)
+include_directories(wickd)
+include_directories(wickd/algebra)
+include_directories(wickd/diagrams)
 
-aux_source_directory(wicked SRC_LIST)
-aux_source_directory(wicked/algebra SRC_LIST)
-aux_source_directory(wicked/diagrams SRC_LIST)
-aux_source_directory(wicked/helpers SRC_LIST)
-aux_source_directory(wicked/api SRC_LIST)
+aux_source_directory(wickd SRC_LIST)
+aux_source_directory(wickd/algebra SRC_LIST)
+aux_source_directory(wickd/diagrams SRC_LIST)
+aux_source_directory(wickd/helpers SRC_LIST)
+aux_source_directory(wickd/api SRC_LIST)
 
 # We are now ready to compile the actual extension module
 nanobind_add_module(
   # Name of the extension
-  _wicked
+  _wickd
 
   # Target the stable ABI for Python 3.12+, which reduces
   # the number of binary wheels that must be built. This
@@ -67,7 +67,7 @@ nanobind_add_module(
 )
 
 # Install directive for scikit-build-core
-install(TARGETS _wicked LIBRARY DESTINATION wicked)
+install(TARGETS _wickd LIBRARY DESTINATION wickd)
 
 # Look for the Boost libraries
 find_package(Boost)
