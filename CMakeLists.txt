@@ -4,6 +4,11 @@ project(wickd LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Ensure UTF-8 encoding support for MSVC
+if (MSVC)
+  add_compile_options(/utf-8 /std:c++20 /W4)
+endif()
+
 if (NOT SKBUILD)
   message(WARNING "\
   This CMake file is meant to be executed using 'scikit-build'. Running
@@ -93,7 +98,4 @@ if(CODE_COVERAGE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
 endif(CODE_COVERAGE)
 
-# Ensure UTF-8 encoding support for MSVC
-if (MSVC)
-    add_compile_options(/utf-8)
-endif()
+message(STATUS "CXX Flags: ${CMAKE_CXX_FLAGS}")
