@@ -2,4 +2,4 @@
 from ._wickd import *
 
 # import Python functions
-from .utils import *
+from wickd.utils import *

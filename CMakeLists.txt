@@ -34,15 +34,15 @@ find_package(Python 3.8
 # Import nanobind through CMake's find_package mechanism
 find_package(nanobind CONFIG REQUIRED)
 
-include_directories(wickd)
-include_directories(wickd/algebra)
-include_directories(wickd/diagrams)
+include_directories(src)
+include_directories(src/algebra)
+include_directories(src/diagrams)
 
-aux_source_directory(wickd SRC_LIST)
-aux_source_directory(wickd/algebra SRC_LIST)
-aux_source_directory(wickd/diagrams SRC_LIST)
-aux_source_directory(wickd/helpers SRC_LIST)
-aux_source_directory(wickd/api SRC_LIST)
+aux_source_directory(src SRC_LIST)
+aux_source_directory(src/algebra SRC_LIST)
+aux_source_directory(src/diagrams SRC_LIST)
+aux_source_directory(src/helpers SRC_LIST)
+aux_source_directory(src/api SRC_LIST)
 
 # We are now ready to compile the actual extension module
 nanobind_add_module(

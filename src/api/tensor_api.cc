@@ -2,7 +2,7 @@
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
 
-#include "../wickd/algebra/tensor.h"
+#include "algebra/tensor.h"
 
 namespace nb = nanobind;
 using namespace nanobind::literals;

@@ -1,7 +1,7 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/string.h>
 
-#include "../wickd/algebra/sqoperator.h"
+#include "algebra/sqoperator.h"
 
 namespace nb = nanobind;
 using namespace nanobind::literals;
