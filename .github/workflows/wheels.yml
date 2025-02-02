@@ -43,10 +43,24 @@ jobs:
         with:
           submodules: true
 
+      - name: Install LLDB (macOS only)
+        if: startsWith(matrix.os, 'macos')
+        run: brew install llvm lldb
+
       - uses: pypa/cibuildwheel@v2.22
         env:
-          CIBW_ENVIRONMENT: CXXFLAGS="-g -O0"
           CIBW_BUILD_VERBOSITY: 1
+          CIBW_ENVIRONMENT: CXXFLAGS="-g -O0"
+
+      - name: Run Tests with LLDB
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          lldb --batch -o "run" -o "bt all" -o "quit" -- python3 -m pytest tests
+
+      # - uses: pypa/cibuildwheel@v2.22
+      #   env:
+      #     CIBW_ENVIRONMENT: CXXFLAGS="-g -O0"
+      #     CIBW_BUILD_VERBOSITY: 1
 
       - name: Verify clean directory
         run: git diff --exit-code
