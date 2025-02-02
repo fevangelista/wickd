@@ -92,3 +92,8 @@ if(CODE_COVERAGE)
   message("-- Code coverage enabled")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
 endif(CODE_COVERAGE)
+
+# Ensure UTF-8 encoding support for MSVC
+if (MSVC)
+    add_compile_options(/utf-8)
+endif()
