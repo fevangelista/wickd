@@ -62,7 +62,7 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'published'
     environment:
       name: pypi
-      url: https://pypi.org/p/nanoforte
+      url: https://pypi.org/p/wickd
 
     steps:
       - uses: actions/setup-python@v5

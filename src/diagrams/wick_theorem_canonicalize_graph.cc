@@ -2,8 +2,6 @@
 #include <iomanip>
 #include <iostream>
 
-#include <format>
-
 #include "helpers/combinatorics.h"
 #include "helpers/helpers.h"
 #include "helpers/orbital_space.h"
