@@ -51,7 +51,18 @@ jobs:
           sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 100
           g++ --version
 
+      - name: Install Latest Clang on macOS
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew update
+          brew install llvm
+          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile
+          source ~/.bash_profile
+          clang++ --version
+
       - uses: pypa/cibuildwheel@v2.22
+        env:
+          CIBW_ENVIRONMENT: CXX=g++ CXXFLAGS="-std=c++20"
 
       - name: Verify clean directory
         run: git diff --exit-code
