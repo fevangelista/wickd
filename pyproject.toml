@@ -33,7 +33,8 @@ wheel.py-api = "cp312"
 build-verbosity = 1
 
 # Run pytest to ensure that the package was correctly built
-test-command = 'lldb -ex "run" -ex "bt" --args python -m pytest {project}/tests'
+test-command = 'lldb --batch -o "run" -o "bt all" -o "quit" -- python3 -m pytest {project}/tests'
+#test-command = 'lldb -ex "run" -ex "bt" --args python -m pytest {project}/tests'
 # "pytest {project}/tests"
 test-requires = "pytest"
 

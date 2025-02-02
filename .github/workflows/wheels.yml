@@ -48,10 +48,10 @@ jobs:
           CIBW_BUILD_VERBOSITY: 1
           CIBW_ENVIRONMENT: CXXFLAGS="-g -O0"
 
-      - name: Run Tests with LLDB
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          lldb --batch -o "run" -o "bt all" -o "quit" -- python3 -m pytest tests
+      # - name: Run Tests with LLDB
+      #   if: startsWith(matrix.os, 'macos')
+      #   run: |
+      #     lldb --batch -o "run" -o "bt all" -o "quit" -- python3 -m pytest tests
 
       # - uses: pypa/cibuildwheel@v2.22
       #   env:
