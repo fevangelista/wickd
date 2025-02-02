@@ -38,7 +38,6 @@ jobs:
         run: |
           pip show -f wickd
           ls -l
-          ls -l wickd
           ls -R $(python -c "import site; print(site.getsitepackages()[0])")/wickd
 
       - name: Verify Python path
