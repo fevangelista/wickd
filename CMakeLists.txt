@@ -1,5 +1,3 @@
-cmake_policy(SET CMP0167 NEW)
-
 cmake_minimum_required(VERSION 3.15...3.26)
 
 project(wickd LANGUAGES CXX)

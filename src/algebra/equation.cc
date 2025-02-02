@@ -1,6 +1,8 @@
 #include <algorithm>
-#include <format>
 #include <iostream>
+
+#define FMT_HEADER_ONLY
+#include <fmt/core.h> // for fmt::format
 
 #include "equation.h"
 #include "expression.h"
@@ -112,7 +114,7 @@ std::string Equation::compile(const std::string &format) const {
     }
 
     str_vec.push_back(lhs_tensor_label +
-                      " += " + std::format("{:.9f}", rhs_factor().to_double()) +
+                      " += " + fmt::format("{:.9f}", rhs_factor().to_double()) +
                       " * np.einsum(");
 
     std::map<std::string, std::string> index_map;

@@ -43,34 +43,7 @@ jobs:
         with:
           submodules: true
 
-      - name: Install GCC 11 on Ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y g++-11 gcc-11
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100
-          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 100
-          which g++-11
-          g++-11 --version
-
-      - name: Install Latest Clang on macOS
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          brew update
-          brew install llvm
-          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile
-          source ~/.bash_profile
-          clang++ --version
-
       - uses: pypa/cibuildwheel@v2.22
-        if: matrix.os == 'ubuntu-latest'
-        env:
-          CC: /usr/bin/gcc-11
-          CXX: /usr/bin/g++-11
-          CIBW_ENVIRONMENT: CC=/usr/bin/gcc-11 CXX=/usr/bin/g++-11 CXXFLAGS="-std=c++20"
-          CIBW_ENVIRONMENT_PASS_LINUX: CC CXX
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
-          CIBW_BUILD_VERBOSITY: 1
 
       - name: Verify clean directory
         run: git diff --exit-code

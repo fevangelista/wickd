@@ -1,6 +1,8 @@
-#include <format>
 #include <iostream>
 #include <vector>
+
+#define FMT_HEADER_ONLY
+#include <fmt/core.h> // for fmt::format
 
 #include "contraction.h"
 #include "graph_matrix.h"
@@ -82,9 +84,9 @@ void WickTheorem::process_contraction(
         PrintLevel::Summary, GraphMatrix free_ops;
         for (const auto &free_graph_matrix
              : free_graph_matrix_vec) { free_ops += free_graph_matrix; };
-        cout << std::format("\n  {:5d}    {:3d}    ", ncontractions_ + 1,
+        cout << fmt::format("\n  {:5d}    {:3d}    ", ncontractions_ + 1,
                             free_ops.num_ops());
-        for (int i = 0; i < k; ++i) { cout << std::format(" {:3d}", a[i]); };
+        for (int i = 0; i < k; ++i) { cout << fmt::format(" {:3d}", a[i]); };
         cout << std::string(std::max(24 - 4 * k, 2), ' ') << free_ops;)
   }
 }

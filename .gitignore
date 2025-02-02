@@ -40,3 +40,5 @@ pywickd.creator
 pywickd.creator.user
 pywickd.files
 pywickd.includes
+
+build/**

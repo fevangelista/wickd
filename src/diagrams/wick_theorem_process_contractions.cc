@@ -1,8 +1,10 @@
 #include <algorithm>
-#include <format>
 #include <future>
 #include <iomanip>
 #include <iostream>
+
+#define FMT_HEADER_ONLY
+#include <fmt/core.h> // for fmt::format
 
 #include "helpers/combinatorics.h"
 #include "helpers/helpers.h"
@@ -409,10 +411,10 @@ WickTheorem::evaluate_contraction(const OperatorProduct &ops,
   term.reindex(pair_contraction_reindex_map);
 
   PRINT(PrintLevel::Summary,
-        cout << std::format("  sign =                 {:d}", sign) << endl;
-        cout << std::format("  factor =               {:s}", factor.repr())
+        cout << fmt::format("  sign =                 {:d}", sign) << endl;
+        cout << fmt::format("  factor =               {:s}", factor.repr())
              << endl;
-        cout << std::format("  combinatorial factor = {:s}", comb_factor.repr())
+        cout << fmt::format("  combinatorial factor = {:s}", comb_factor.repr())
              << endl;);
 
   return std::make_pair(term, sign * factor * comb_factor);

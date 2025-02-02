@@ -1,8 +1,10 @@
 #include <algorithm>
-#include <format>
 #include <iomanip>
 #include <iostream>
 #include <map>
+
+#define FMT_HEADER_ONLY
+#include <fmt/core.h> // for fmt::format
 
 #include "contraction.h"
 #include "operator.h"
@@ -78,14 +80,14 @@ void print_contraction(const OperatorProduct &ops,
   // 3. Show the operator index
   std::cout << "  indices ";
   for (const auto &sqop : sqops) {
-    std::cout << std::format("{:3s}", sqop.index().str());
+    std::cout << fmt::format("{:3s}", sqop.index().str());
   }
   std::cout << endl;
 
   // 3. Show the permutation of the operators
   std::cout << "  order  ";
   for (int order : sign_order) {
-    std::cout << std::format("{:3d}", order);
+    std::cout << fmt::format("{:3d}", order);
   }
   std::cout << "\n" << endl;
 
