@@ -43,6 +43,14 @@ jobs:
         with:
           submodules: true
 
+      - name: Install GCC 11 on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++-11
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 100
+          g++ --version
+
       - uses: pypa/cibuildwheel@v2.22
 
       - name: Verify clean directory
