@@ -5,7 +5,8 @@ Wick&d implements Wick's contraction theorem for general Fermi vacua.
 
 <img src="https://github.com/fevangelista/wickd/raw/main/lib/logo.png" width="300">
 
-[![Build Status](https://github.com/fevangelista/wickd/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/fevangelista/wickd/actions/workflows/python-package-conda.yml)
+[![Pip](https://github.com/fevangelista/wickd/actions/workflows/pip.yml/badge.svg)](https://github.com/fevangelista/wickd/actions/workflows/pip.yml)
+[![Wheels](https://github.com/fevangelista/wickd/actions/workflows/wheels.yml/badge.svg)](https://github.com/fevangelista/wickd/actions/workflows/wheels.yml)
 [![codecov](https://codecov.io/gh/fevangelista/wickd/branch/main/graph/badge.svg?token=oe5ECK9O1N)](https://codecov.io/gh/fevangelista/wickd)
 [![DOI](https://zenodo.org/badge/64144811.svg)](https://zenodo.org/badge/latestdoi/64144811)
 
