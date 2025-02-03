@@ -7,7 +7,7 @@ name = "wickd"
 version = "1.1.0"
 description = "An example minimal project that compiles bindings using nanobind and scikit-build"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 authors = [
     { name = "Francesco A. Evangelista", email = "" },
 ]
