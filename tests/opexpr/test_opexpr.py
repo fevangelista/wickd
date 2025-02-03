@@ -1,4 +1,5 @@
-import wicked as w
+import wickd as w
+
 
 def test_opexpr1():
     """Test the definition of an operator expression"""
@@ -11,6 +12,7 @@ def test_opexpr1():
     T3 = T1 + T2
     T = w.op("t", ["v+ o", "v+ v+ o o"])
     assert T == T3
+
 
 def test_opexpr2():
     """Test the canonicalization of an operator expression"""
@@ -29,14 +31,16 @@ def test_opexpr2():
     prod.canonicalize()
     assert str(prod) == "+ a { v+ v } c { o+ o } b { o+ o }"
 
+
 def test_opexpr3():
     w.reset_space()
     w.add_space("o", "fermion", "occupied", ["i", "j", "k", "l", "m", "n"])
     w.add_space("v", "fermion", "unoccupied", ["a", "b", "c", "d", "e", "f"])
 
-    op1 = w.op('a', ["v+ o+ o v", "o+ v+ v o"], unique=True)
-    op2 = w.op('a', ["v+ o+ v o"])
+    op1 = w.op("a", ["v+ o+ o v", "o+ v+ v o"], unique=True)
+    op2 = w.op("a", ["v+ o+ v o"])
     assert op1 == op2
+
 
 if __name__ == "__main__":
     test_opexpr1()

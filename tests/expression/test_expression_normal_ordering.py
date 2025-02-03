@@ -1,5 +1,5 @@
 import pytest
-import wicked as w
+import wickd as w
 
 
 def test_is_normal_ordered():

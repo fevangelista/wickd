@@ -1,5 +1,5 @@
-import wicked as w
-from wicked import Index, index
+import wickd as w
+from wickd import Index, index
 
 
 def test_index():

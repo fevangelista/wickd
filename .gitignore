@@ -35,8 +35,10 @@ CMakeCache.txt
 CMakeFiles/
 Makefile
 cmake_install.cmake
-pywicked.config
-pywicked.creator
-pywicked.creator.user
-pywicked.files
-pywicked.includes
+pywickd.config
+pywickd.creator
+pywickd.creator.user
+pywickd.files
+pywickd.includes
+
+build/**
