@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-14, windows-latest]
+        os: [ubuntu-latest, macos-14]
 
     steps:
       - uses: actions/checkout@v4
@@ -44,19 +44,6 @@ jobs:
           submodules: true
 
       - uses: pypa/cibuildwheel@v2.22
-        env:
-          CIBW_BUILD_VERBOSITY: 1
-          CIBW_ENVIRONMENT: CXXFLAGS="-g -O0"
-
-      # - name: Run Tests with LLDB
-      #   if: startsWith(matrix.os, 'macos')
-      #   run: |
-      #     lldb --batch -o "run" -o "bt all" -o "quit" -- python3 -m pytest tests
-
-      # - uses: pypa/cibuildwheel@v2.22
-      #   env:
-      #     CIBW_ENVIRONMENT: CXXFLAGS="-g -O0"
-      #     CIBW_BUILD_VERBOSITY: 1
 
       - name: Verify clean directory
         run: git diff --exit-code
