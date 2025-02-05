@@ -45,9 +45,6 @@ jobs:
           submodules: true
 
       - uses: pypa/cibuildwheel@v2.22
-        env:
-          CIBW_BUILD_VERBOSITY: 1
-          CIBW_ENVIRONMENT: CXXFLAGS="-g -O0"
 
       - name: Verify clean directory
         run: git diff --exit-code
