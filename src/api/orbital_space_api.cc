@@ -19,6 +19,15 @@ void export_OrbitalSpaceInfo(nb::module_ &m) {
       .def("label", &OrbitalSpaceInfo::label)
       .def("indices", &OrbitalSpaceInfo::indices)
       .def("to_dict", &OrbitalSpaceInfo::to_dict)
+      .def("space_type",
+           [](const OrbitalSpaceInfo &osi, int pos) -> std::string {
+             switch (osi.space_type(pos)) {
+             case SpaceType::Occupied:   return "occupied";
+             case SpaceType::Unoccupied: return "unoccupied";
+             case SpaceType::General:    return "general";
+             }
+             return "general";
+           })
       .def("__str__", &OrbitalSpaceInfo::str);
 
   m.def("osi", []() { return orbital_subspaces; });
