@@ -22,7 +22,7 @@ __all__ = ["expression_to_tikz", "display_diagrams"]
 
 # ── Layout parameters ─────────────────────────────────────────────────────────
 _VERT_SEP = 2.0   # vertical gap between operator bars
-_BAR_WIDTH = 1.5  # minimum half-width of a bar
+_BAR_WIDTH = 0.8  # minimum half-width of a bar
 _CONN_SEP  = 0.6  # horizontal spacing between line attachment points
 _EXT_LEN   = 0.8  # length of external-leg stubs
 
@@ -168,19 +168,18 @@ def _term_to_tikz(tensors, lines, ext_legs, coeff):
     bar_half = max((abs(x) for x in line_xs), default=0.0) + _CONN_SEP
     bar_half = max(bar_half, _BAR_WIDTH)
 
-    out = []
+    out  = []
+    dots = []   # filled-circle positions collected last so they render on top
 
     # ── Operator bars ──────────────────────────────────────────────────────
     for k, tensor in enumerate(tensors):
-        dm          = _is_density_matrix(tensor)
-        bar_style   = "thick, dashed" if dm else "thick"
-        lbl         = _label_latex(tensor.label())
-        # Density matrices get no hat; regular operators do
-        node_label  = f"${lbl}$" if dm else rf"$\hat{{{lbl}}}$"
+        dm        = _is_density_matrix(tensor)
+        bar_style = "thick, dashed" if dm else "thick"
+        lbl       = _label_latex(tensor.label())
         out.append(
             rf"  \draw[{bar_style}] ({-bar_half:.2f},{y[k]:.2f})"
             rf" -- ({bar_half:.2f},{y[k]:.2f})"
-            rf" node[right] {{{node_label}}};"
+            rf" node[right] {{${lbl}$}};"
         )
 
     # ── Internal propagator lines ──────────────────────────────────────────
@@ -196,6 +195,8 @@ def _term_to_tikz(tensors, lines, ext_legs, coeff):
         out.append(
             rf"  \node[right, font=\small] at ({x:.2f},{ym:.2f}) {{${lbl}$}};"
         )
+        dots.append((x, y[ti]))
+        dots.append((x, y[tj]))
 
     # ── External legs ──────────────────────────────────────────────────────
     n_ext  = sum(1 for e in ext_legs if e[2] >= 0)
@@ -225,6 +226,11 @@ def _term_to_tikz(tensors, lines, ext_legs, coeff):
         out.append(
             rf"  \node[right, font=\small] at ({x:.2f},{ym:.2f}) {{${lbl}$}};"
         )
+        dots.append((x, yi_val))
+
+    # ── Filled dots at every line–bar junction (drawn last = on top) ────────
+    for dx, dy in dots:
+        out.append(rf"  \filldraw ({dx:.2f},{dy:.2f}) circle (2pt);")
 
     # ── Coefficient ────────────────────────────────────────────────────────
     out.append(
@@ -293,7 +299,7 @@ def _compile_to_png(src, resolution=1200):
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
-def display_diagrams(expr, resolution=1200):
+def display_diagrams(expr, resolution=1200, scale=0.5):
     """
     Render a Wick&d Expression as Goldstone diagrams inline in a Jupyter notebook.
 
@@ -301,19 +307,22 @@ def display_diagrams(expr, resolution=1200):
     ----------
     expr       : wickd.Expression
     resolution : int
-        Maximum pixel dimension of the output PNG (default 1200).
+        Maximum pixel dimension of the compiled PNG (default 1200).
+    scale      : float
+        Fraction of ``resolution`` used as the display width (default 0.5).
 
     Requires ``pdflatex`` and either ``sips`` (macOS) or ``pdftoppm`` (Linux).
     """
     from IPython.display import Image, display as ipy_display
 
+    display_width = int(resolution * scale)
     for term, coeff in expr:
         tensors, lines, ext_legs = _parse_term(term)
         if not tensors:
             continue
         src = _wrap_standalone(_term_to_tikz(tensors, lines, ext_legs, coeff))
         png = _compile_to_png(src, resolution=resolution)
-        ipy_display(Image(filename=png))
+        ipy_display(Image(filename=png, width=display_width))
 
 
 def expression_to_tikz(expr, standalone=False):
