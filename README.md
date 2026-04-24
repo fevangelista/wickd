@@ -14,21 +14,24 @@ deriving equations in quantum chemistry methods such as coupled cluster, MBPT, a
 ## Quick start
 
 ```python
-import wickd as w
-
 # Define a Slater determinant reference with occupied (o) and virtual (v) spaces
 w.reset_space()
-w.add_space("o", "fermion", "occupied",   ['i','j','k','l'])
-w.add_space("v", "fermion", "unoccupied", ['a','b','c','d'])
+w.add_space("o", "fermion", "occupied", ["i", "j", "k", "l"])
+w.add_space("v", "fermion", "unoccupied", ["a", "b", "c", "d"])
 
-# Build the operator product F * T1
-F  = w.utils.gen_op('f', 1, 'ov', 'ov')
-T1 = w.op('t', ['v+ o'])
+# Build the operators F
+F = w.utils.gen_op("f", 1, "ov", "ov")
+# Build the one-body operator T1 (occupied to virtual)
+T1 = w.op("t", ["v+ o"])
+
+# Build the product of F and T1
+F_T1 = F @ T1
 
 # Apply Wick's theorem and collect all fully contracted terms
-wt   = w.WickTheorem()
-expr = wt.contract(F @ T1, minrank=0, maxrank=4)
-print(expr.latex())
+wt = w.WickTheorem()
+expr = wt.contract(F_T1, minrank=0, maxrank=4)
+
+print(f"F T_{{1}} = {expr.latex()}")
 ```
 
 ## Installation
