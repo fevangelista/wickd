@@ -84,9 +84,3 @@ def test_expression3():
     expr = expr.vacuum_normal_ordered()
     test_expr = w.expression("b+(v_1) b+(v_2) b-(v_2) b-(v_1)")
     assert expr == test_expr
-
-
-if __name__ == "__main__":
-    test_expression1()
-    test_expression2()
-    test_expression3()

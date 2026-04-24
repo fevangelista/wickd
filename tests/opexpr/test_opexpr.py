@@ -40,9 +40,3 @@ def test_opexpr3():
     op1 = w.op("a", ["v+ o+ o v", "o+ v+ v o"], unique=True)
     op2 = w.op("a", ["v+ o+ v o"])
     assert op1 == op2
-
-
-if __name__ == "__main__":
-    test_opexpr1()
-    test_opexpr2()
-    test_opexpr3()

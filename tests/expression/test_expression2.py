@@ -145,10 +145,3 @@ def test_expression4():
     )
 
     assert expr == test_expr
-
-
-if __name__ == "__main__":
-    test_expression1()
-    test_expression2()
-    test_expression3()
-    test_expression4()

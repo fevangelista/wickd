@@ -229,20 +229,3 @@ def test_tensor_adjoint():
     assert t_adj.upper() == t.upper()
     # adjoint of adjoint is the original
     assert t_adj.adjoint() == t
-
-
-if __name__ == "__main__":
-    test_tensor_lt()
-    test_tensor_rank_and_indices()
-    test_tensor_signature_and_symmetry_factor()
-    test_tensor_adjoint()
-    test_tensor()
-    test_tensor_symmetry_types()
-    test_tensor_modifier_syntax_all_six()
-    test_tensor_modifier_overrides_default_symmetry()
-    test_tensor_equality_symmetry_distinguishes()
-    test_tensor_equality_conjugation_distinguishes()
-    test_tensor_str_round_trip()
-    test_tensor_property_accessors()
-    test_tensor_label_and_indices()
-    print("All tests passed.")

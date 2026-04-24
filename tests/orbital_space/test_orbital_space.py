@@ -23,8 +23,3 @@ def test_orbital_space_exceptions():
         w.add_space("c", "fermion", "occupied", ["m", "n"])
     with pytest.raises(Exception):
         w.add_space("v", "fermion", "occupied", ["m", "n"])
-
-
-if __name__ == "__main__":
-    test_orbital_space()
-    test_orbital_space_exceptions()

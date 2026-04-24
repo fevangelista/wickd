@@ -32,7 +32,3 @@ def test_diag():
 + h { o+ v }
 + h { o+ o }"""
     )
-
-
-if __name__ == "__main__":
-    test_diag()

@@ -315,20 +315,3 @@ def test_wick_theorem_14():
 
     print_comparison(test, ref.canonicalize())
     assert test == ref
-
-
-if __name__ == "__main__":
-    test_wick_theorem_1()
-    test_wick_theorem_2()
-    test_wick_theorem_3()
-    test_wick_theorem_4()
-    test_wick_theorem_5()
-    test_wick_theorem_6()
-    test_wick_theorem_7()
-    test_wick_theorem_8()
-    test_wick_theorem_9()
-    test_wick_theorem_10()
-    test_wick_theorem_11()
-    test_wick_theorem_12()
-    test_wick_theorem_13()
-    test_wick_theorem_14()

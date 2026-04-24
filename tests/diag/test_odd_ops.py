@@ -105,12 +105,3 @@ def test_odd_operators_5():
     val2 = w.expression("1/36 a^{o0,o1,o2}_{v0,v1,v2} b^{v0,v1,v2}_{o0,o1,o2}")
     print_comparison(val, val2)
     assert val == val2
-
-
-if __name__ == "__main__":
-    test_odd_operators_1()
-    test_odd_operators_2()
-    test_odd_operators_3()
-    test_odd_operators_4()
-    test_odd_operators_5()
-

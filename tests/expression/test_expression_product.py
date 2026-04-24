@@ -42,7 +42,3 @@ def test_expression_product1():
 #         + w.expression("-delta^{p1}_{p2} a-(h2) a+(h1)")
 #     )
 #     assert expr == test_expr
-
-
-if __name__ == "__main__":
-    test_expression_product1()

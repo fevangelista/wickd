@@ -144,14 +144,3 @@ def test_term_coefficient_and_symterm():
     st = t.symterm()
     assert isinstance(st, w.SymbolicTerm)
     assert st.nops() == 2
-
-
-if __name__ == "__main__":
-    test_term()
-    test_symbolicterm_eq_lt()
-    test_symbolicterm_nops()
-    test_symbolicterm_normal_order_predicates()
-    test_symbolicterm_adjoint()
-    test_symbolicterm_vacuum_normal_order()
-    test_symbolicterm_compile()
-    test_term_coefficient_and_symterm()

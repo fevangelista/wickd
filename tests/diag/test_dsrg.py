@@ -137,9 +137,3 @@ def test_dsrg3():
 
     H3_test = wt.contract(w.commutator(H, A), 6, 6).canonicalize()
     assert H3_test == H3_dsrg3p_ref
-
-
-if __name__ == "__main__":
-    test_dsrg1()
-    test_dsrg2()
-    test_dsrg3()

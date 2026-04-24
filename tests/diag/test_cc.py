@@ -98,7 +98,3 @@ def cc_n(max_n):
     print(diagrams_count_ref[: max_n + 1])
 
     assert diagrams_count == diagrams_count_ref[: max_n + 1]
-
-
-if __name__ == "__main__":
-    test_cc()

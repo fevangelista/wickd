@@ -87,7 +87,3 @@ def test_energy():
         comp
         == 'R += 0.250000000 * np.einsum("ijab,abij->",T2["oovv"],v["vvoo"],optimize="optimal")'
     )
-
-
-if __name__ == "__main__":
-    test_energy()

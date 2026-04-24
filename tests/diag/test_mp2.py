@@ -79,7 +79,3 @@ def test_energy():
     # print(mbeq[2])
     # expr += wt.contract(w.rational(1, 2), V @ T1 @ T1, 0, 0)
     # print(expr)
-
-
-if __name__ == "__main__":
-    test_energy()

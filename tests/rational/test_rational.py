@@ -54,8 +54,3 @@ def test_rational_new_operators():
     assert neg == w.rational(-3, 4)
     assert -neg == w.rational(3, 4)
     assert -w.rational(0, 1) == w.rational(0, 1)
-
-
-if __name__ == "__main__":
-    test_rational()
-    test_rational_new_operators()

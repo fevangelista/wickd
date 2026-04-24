@@ -34,7 +34,3 @@ def test_is_normal_ordered():
 
     e = w.expression("a+(a_0) a-(a_7) a+(b_0) a-(b_3)")
     assert not e.is_vacuum_normal_ordered()
-
-
-if __name__ == "__main__":
-    test_is_normal_ordered()

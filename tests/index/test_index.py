@@ -67,8 +67,3 @@ def test_index2():
     test_indices = w.indices("o_0,o_1,a_0,a_1,a_2,v_0,v_1")
     assert indices == test_indices
     assert sign == w.rational(-1, 1)
-
-
-if __name__ == "__main__":
-    test_index()
-    test_index2()

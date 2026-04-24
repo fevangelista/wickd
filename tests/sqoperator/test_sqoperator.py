@@ -113,10 +113,3 @@ def test_sqoperator_new_accessors():
     import pytest
     with pytest.raises(RuntimeError):
         cop.compile("einsum")
-
-
-if __name__ == "__main__":
-    test_sqoperator()
-    test_sqoperator2()
-    test_sqoperator3()
-    test_sqoperator_new_accessors()

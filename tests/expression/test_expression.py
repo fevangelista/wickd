@@ -181,13 +181,3 @@ def test_str_roundtrip_positive_integer_coefficient():
         )
         e2 = w.utils.string_to_expr(str(e1))
         assert e1 == e2, f"Round-trip failed for coefficient {coeff_str!r}"
-
-
-if __name__ == "__main__":
-    test_expression()
-    test_expression2()
-    test_expression3()
-    test_expression4()
-    test_expression5()
-    test_expression_dot_and_norm()
-    test_str_roundtrip_positive_integer_coefficient()

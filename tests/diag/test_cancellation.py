@@ -27,7 +27,3 @@ def test_cancellation():
 +1/4 gamma1^{a1}_{a0} lambda3^{a5,a6,a7}_{a2,a3,a4} t^{a0,a2}_{a6,a7} v^{a3,a4}_{a1,a5}"""
     )
     assert val == ref
-
-
-if __name__ == "__main__":
-    test_cancellation()

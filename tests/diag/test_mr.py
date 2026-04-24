@@ -67,9 +67,3 @@ def test_mr3():
 +f^{a1}_{a0} gamma1^{a0}_{a2} lambda2^{a4,a5}_{a1,a3} t^{a3}_{a4} t^{a2}_{a5}
 -f^{a1}_{a0} lambda3^{a0,a4,a5}_{a1,a2,a3} t^{a2}_{a5} t^{a3}_{a4}"""
     ref = w.utils.string_to_expr(ref_expr)
-
-
-if __name__ == "__main__":
-    test_mr1()
-    test_mr2()
-    test_mr3()

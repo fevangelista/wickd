@@ -90,14 +90,3 @@ def test_equation_eq():
     eqs2 = expr2.to_manybody_equation("T")
     all_eqs2 = [eq for eqs_list in eqs2.values() for eq in eqs_list]
     assert all_eqs[0] == all_eqs2[0]
-
-
-if __name__ == "__main__":
-    test_operator_label()
-    test_operator_cre_ann()
-    test_operator_num_ops()
-    test_operator_factor()
-    test_operator_adjoint()
-    test_operator_eq_ne_lt()
-    test_equation_eq()
-    print("All tests passed.")
