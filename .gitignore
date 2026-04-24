@@ -43,3 +43,9 @@ pywickd.includes
 
 build/**
 local/**
+*.aux
+*.log
+*.pdf
+*.tex
+tests/docs/l
+tests/docs/l2
