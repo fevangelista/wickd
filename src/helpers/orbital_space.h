@@ -50,10 +50,6 @@ public:
                  const std::vector<std::string> &indices,
                  const std::vector<char> &elementary_spaces = {});
 
-  // /// Add a composite space
-  // void add_composite_space(char label,
-  //                          const std::vector<char> &elementary_spaces);
-
   /// Return the number of elementary spaces
   std::int64_t num_spaces() {
     return static_cast<std::int64_t>(space_info_.size());
