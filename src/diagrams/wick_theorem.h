@@ -155,7 +155,8 @@ private:
   void
   process_contraction(const std::vector<int> &a, int k,
                       const std::vector<GraphMatrix> &free_graph_matrix_vec,
-                      const int minrank, const int maxrank);
+                      const int free_rank, const int minrank,
+                      const int maxrank);
 
   /// Return a vector of indices of elementary contractions that can be
   /// added to the current backtracking solution. All candidates generated
