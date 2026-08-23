@@ -50,25 +50,6 @@ std::string contraction_signature(const OperatorProduct &ops,
 
 using namespace std;
 
-namespace {
-
-CompositeContraction
-canonical_port_order(const CompositeContraction &contractions) {
-  CompositeContraction ordered_contractions(contractions);
-
-  // Explicit operator legs are assigned using offsets accumulated while
-  // elementary contractions are evaluated. Sort the contractions first so
-  // that this port assignment does not depend on their incoming order. This
-  // is the same descending lexicographic order selected by graph_less for a
-  // fixed operator order.
-  std::sort(ordered_contractions.begin(), ordered_contractions.end(),
-            [](const ElementaryContraction &lhs,
-               const ElementaryContraction &rhs) { return rhs < lhs; });
-  return ordered_contractions;
-}
-
-} // namespace
-
 Expression WickTheorem::process_contractions(scalar_t factor,
                                              const OperatorProduct &ops,
                                              const int minrank,
@@ -105,7 +86,8 @@ Expression WickTheorem::process_contractions(scalar_t factor,
       const auto [best_ops, best_contractions, sign] =
           do_canonicalize_graph_
               ? canonicalize_contraction_graph(ops, contraction)
-              : std::make_tuple(ops, contraction, scalar_t(1));
+              : std::make_tuple(ops, canonical_contraction_order(contraction),
+                                scalar_t(1));
       timers_["canonicalize_contraction_graph"] += tc.get();
 
       timer te;
@@ -192,7 +174,8 @@ Expression WickTheorem::process_single_contraction(
     const auto [best_ops, best_contractions, sign] =
         do_canonicalize_graph_
             ? canonicalize_contraction_graph(ops, contraction)
-            : std::make_tuple(ops, contraction, scalar_t(1));
+            : std::make_tuple(ops, canonical_contraction_order(contraction),
+                              scalar_t(1));
     timers_["canonicalize_contraction_graph"] += tc.get();
 
     timer te;
@@ -241,11 +224,6 @@ std::pair<SymbolicTerm, scalar_t>
 WickTheorem::evaluate_contraction(const OperatorProduct &ops,
                                   const CompositeContraction &contractions,
                                   scalar_t factor) {
-  // Canonicalize the order in which contractions consume the otherwise
-  // indistinguishable legs of each operator tensor. Graph canonicalization
-  // already produces this order, while the noncanonical path may not.
-  const auto ordered_contractions = canonical_port_order(contractions);
-
   // 1. Get the Tensor objects and SQOperator vector corresponding to the
   // uncontracted term
   auto tensors_sqops_op_map = contraction_tensors_sqops(ops);
@@ -285,7 +263,7 @@ WickTheorem::evaluate_contraction(const OperatorProduct &ops,
   std::vector<std::vector<bool>> bit_map_vec;
 
   // Loop over elementary contractions
-  for (const ElementaryContraction &contraction : ordered_contractions) {
+  for (const ElementaryContraction &contraction : contractions) {
     // a bit array to keep track of which operators are contracted
     std::vector<bool> bit_map(sqops.size(), false);
 
@@ -445,7 +423,7 @@ WickTheorem::evaluate_contraction(const OperatorProduct &ops,
   }
 
   // find the combinatorial factor associated with this contraction
-  scalar_t comb_factor = combinatorial_factor(ops, ordered_contractions);
+  scalar_t comb_factor = combinatorial_factor(ops, contractions);
 
   SymbolicTerm term;
 

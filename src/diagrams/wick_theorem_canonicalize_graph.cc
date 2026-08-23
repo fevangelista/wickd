@@ -103,52 +103,6 @@ bool do_contractions_commute(int i, int j, const OperatorProduct &ops,
   return true;
 }
 
-bool graph_less(const std::pair<int, int> &l, const std::pair<int, int> &r,
-                const std::vector<std::vector<int>> &ops_perms,
-                std::vector<std::vector<int>> &con_perms,
-                const OperatorProduct &ops,
-                const CompositeContraction &contractions) {
-  // here we are given the indices of the permutations of the operators and we
-  // have to determine if permutation l is less than r
-
-  const auto &l_ops_perm = ops_perms[l.first];
-  const auto &r_ops_perm = ops_perms[r.first];
-  const auto &l_con_perm = con_perms[l.second];
-  const auto &r_con_perm = con_perms[r.second];
-
-  // first compare the operators
-  // consider three cases:
-  // 1.  lops <  rops (return true)
-  // 2.  lops == rops (must check the contractions)
-  // 3.  lops >  rops (return false)
-  const int no = l_ops_perm.size();
-  for (int i = 0; i < no; i++) {
-    if (ops[l_ops_perm[i]] < ops[r_ops_perm[i]]) {
-      return true;
-    }
-    if (ops[r_ops_perm[i]] < ops[l_ops_perm[i]]) {
-      return false;
-    }
-  }
-
-  // if we made it here lops == rops
-  const int nc = l_con_perm.size();
-  // loop over all the contractions permuted
-  for (int j = 0; j < nc; j++) {
-    const auto &l_con = contractions[l_con_perm[j]];
-    const auto &r_con = contractions[r_con_perm[j]];
-    for (int i = 0; i < no; i++) {
-      if (l_con[l_ops_perm[i]] < r_con[r_ops_perm[i]]) {
-        return false;
-      }
-      if (r_con[r_ops_perm[i]] < l_con[l_ops_perm[i]]) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
 std::tuple<OperatorProduct, CompositeContraction, scalar_t>
 WickTheorem::canonicalize_contraction_graph(
     const OperatorProduct &ops, const CompositeContraction &contractions) {
@@ -211,24 +165,9 @@ WickTheorem::canonicalize_contraction_graph(
                                    << " valid operator permutations\n"
                                    << endl;);
 
-  std::vector<std::vector<int>> con_perms;
-  {
-    // Loop over all permutations of contractions
-    std::vector<int> con_perm(contractions.size());
-    std::iota(con_perm.begin(), con_perm.end(), 0);
-    do {
-      PRINT(PrintLevel::Detailed, cout << "  Contraction permutation: ";
-            PRINT_ELEMENTS(con_perm); cout << endl;);
-      con_perms.push_back(con_perm);
-    } while (std::next_permutation(con_perm.begin(), con_perm.end()));
-  }
-  PRINT(PrintLevel::Detailed, cout << "\n  Found " << con_perms.size()
-                                   << " valid contraction permutations\n"
-                                   << endl;);
-
-  // Decoupled two-pass search
-  // graph_less is lexicographic: operators first, then contractions.
-  // We exploit this to avoid forming the full nops! × c! Cartesian product.
+  // The graph order is lexicographic: operators first, then contractions. We
+  // exploit this to consider contraction order only for operator permutations
+  // that produce the minimum operator sequence.
 
   // Pass 1: find the minimum operator sequence among all valid op permutations.
   // Cost: O(|ops_perms| × nops).
@@ -263,18 +202,47 @@ WickTheorem::canonicalize_contraction_graph(
                                    << " op permutation(s)\n"
                                    << endl;);
 
-  // Pass 3: among the |tied_ops| × c! pairs scan for the overall minimum.
-  std::pair<int, int> best_graph{tied_ops[0], 0};
+  // Pass 3: sort the contractions once for each tied operator permutation.
+  // This directly gives the minimum contraction sequence for that operator
+  // order and avoids enumerating all c! contraction permutations.
+  int canonical_ops_perm_idx = tied_ops[0];
+  std::vector<int> canonical_contr_perm;
+  bool have_canonical_contr_perm = false;
+
+  auto contraction_sequence_less =
+      [&](int lhs_ops_idx, const std::vector<int> &lhs_perm, int rhs_ops_idx,
+          const std::vector<int> &rhs_perm) {
+        for (std::size_t c = 0; c < lhs_perm.size(); ++c) {
+          const auto &lhs = contractions[lhs_perm[c]];
+          const auto &rhs = contractions[rhs_perm[c]];
+          if (canonical_contraction_less(lhs, ops_perms[lhs_ops_idx], rhs,
+                                         ops_perms[rhs_ops_idx])) {
+            return true;
+          }
+          if (canonical_contraction_less(rhs, ops_perms[rhs_ops_idx], lhs,
+                                         ops_perms[lhs_ops_idx])) {
+            return false;
+          }
+        }
+        return false;
+      };
+
   for (int oi : tied_ops) {
-    for (int ci = 0; ci < static_cast<int>(con_perms.size()); ci++) {
-      std::pair<int, int> candidate{oi, ci};
-      if (graph_less(candidate, best_graph, ops_perms, con_perms, ops,
-                     contractions))
-        best_graph = candidate;
+    std::vector<int> con_perm(contractions.size());
+    std::iota(con_perm.begin(), con_perm.end(), 0);
+    std::stable_sort(con_perm.begin(), con_perm.end(), [&](int lhs, int rhs) {
+      return canonical_contraction_less(contractions[lhs], ops_perms[oi],
+                                        contractions[rhs], ops_perms[oi]);
+    });
+
+    if (!have_canonical_contr_perm ||
+        contraction_sequence_less(oi, con_perm, canonical_ops_perm_idx,
+                                  canonical_contr_perm)) {
+      canonical_ops_perm_idx = oi;
+      canonical_contr_perm = std::move(con_perm);
+      have_canonical_contr_perm = true;
     }
   }
-
-  const auto [canonical_ops_perm_idx, canonical_contr_perm_idx] = best_graph;
 
   // Get the sign associated with rearranging the operators
   const scalar_t canonical_sign = ops_perms_sign[canonical_ops_perm_idx];
@@ -288,7 +256,7 @@ WickTheorem::canonicalize_contraction_graph(
   // Get the canonical order of the contractions
   // permute the order and operator upon a contraction acts
   CompositeContraction canonical_contr;
-  for (int c : con_perms[canonical_contr_perm_idx]) {
+  for (int c : canonical_contr_perm) {
     std::vector<GraphMatrix> permuted_contr;
     for (int o : ops_perms[canonical_ops_perm_idx]) {
       permuted_contr.push_back(contractions[c][o]);
@@ -302,11 +270,11 @@ WickTheorem::canonicalize_contraction_graph(
         cout << "    Operator permutation: ";
         PRINT_ELEMENTS(ops_perms[canonical_ops_perm_idx]); cout << endl;
         cout << "    Contraction permutation: ";
-        PRINT_ELEMENTS(con_perms[canonical_contr_perm_idx]); cout << endl;
+        PRINT_ELEMENTS(canonical_contr_perm); cout << endl;
         cout << "    Graph of the canonical contraction:" << endl;
         print_contraction_graph(ops, contractions,
                                 ops_perms[canonical_ops_perm_idx],
-                                con_perms[canonical_contr_perm_idx]);
+                                canonical_contr_perm);
         cout << endl;);
 
   return std::make_tuple(canonical_ops, canonical_contr, canonical_sign);

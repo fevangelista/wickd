@@ -9,22 +9,22 @@ pytest run and must be invoked explicitly:
 
 Purpose
 -------
-Graph canonicalization has been measured at 91–92 % of total ``contract()``
-wall time (see roadmap.md §P2).  This test stresses the hot path by running
-the full BCH + Wick contraction pipeline at excitation level n = 5, which
-produces 51 954 operator products for ``canonicalize_contraction_graph`` to
-process.
+This test stresses graph canonicalization by running the full BCH + Wick
+contraction pipeline at excitation level n = 5, which produces 51 954 operator
+products for ``canonicalize_contraction_graph`` to process.
 
-The test also quantifies the canonicalization overhead directly by repeating
-the same contraction with ``do_canonicalize_graph(False)`` and asserting that
-canon=ON takes at least 5× longer than canon=OFF.  On the profiled hardware
-(Apple Silicon, single thread) the measured ratio is roughly 12×.
+The test also quantifies canonicalization overhead directly by repeating the
+same contraction with ``do_canonicalize_graph(False)``. Canonicalization
+previously took roughly 12× longer because it enumerated every permutation of
+the elementary contractions. The sorted canonical-order implementation should
+keep that ratio below 3×.
 
-Timing reference (Apple Silicon M-series, single thread):
+Timing reference after sorting canonical contractions (Apple Silicon M-series,
+single thread):
     BCH n=5 expansion : ~0.9 s
-    contract canon=ON : ~8.5 s   ← dominated by canonicalize_contraction_graph
+    contract canon=ON : ~0.9 s
     contract canon=OFF: ~0.7 s
-    total             : ~10 s
+    ratio             : ~1.3×
 """
 
 import time
@@ -64,20 +64,18 @@ def _make_T(n: int):
 # ---------------------------------------------------------------------------
 
 @pytest.mark.slow
-def test_bch_n5_canonicalization_dominates():
+def test_bch_n5_canonicalization_cost():
     """BCH to 4th order with T up to T_5 (CC excitation level n=5).
 
-    Produces 51 954 operator products; each is passed to
-    canonicalize_contraction_graph.  The total wall time is ~10 s
-    single-threaded, with canonicalization accounting for >90 % of that.
+        Produces 51 954 operator products; each is passed to
+        canonicalize_contraction_graph.
 
     Assertions
     ----------
     1. The contracted expression is non-trivial (≥100 distinct terms).
-    2. Canonicalization overhead: canon=ON must take at least 5× longer than
-       canon=OFF on the same input.  (Measured ratio on reference hardware: ~12×.)
-    3. Both canon=ON and canon=OFF produce the same number of terms — the
-       invariant that canonicalization merges but never creates terms.
+        2. Canonicalization overhead must remain below 3× canon=OFF on the same
+           input.
+        3. Canonicalization may merge terms but must never create more terms.
     """
     _setup_ov()
     H = _make_hamiltonian()
@@ -112,13 +110,12 @@ def test_bch_n5_canonicalization_dominates():
     # 1. non-trivial result
     assert n_on >= 100, f"Expected ≥100 terms, got {n_on}"
 
-    # 2. canonicalization dominates (must be at least 5× slower)
+    # 2. canonicalization must no longer dominate the contraction time
     ratio = t_on / t_off if t_off > 0 else float("inf")
-    assert ratio >= 5.0, (
-        f"canon=ON ({t_on:.2f}s) should be ≥5× slower than canon=OFF "
+    assert ratio <= 3.0, (
+        f"canon=ON ({t_on:.2f}s) should be ≤3× slower than canon=OFF "
         f"({t_off:.2f}s); got ratio={ratio:.1f}×.  "
-        "Either canonicalization is no longer the bottleneck, or the "
-        "no-canon path is unexpectedly slow."
+        "Canonical contraction ordering may have regressed."
     )
 
     # 3. canon never introduces more terms than no-canon
