@@ -63,7 +63,7 @@ pip install --no-build-isolation -ve .
 
 ## Requirements
 
-- Python ≥ 3.9
+- Python ≥ 3.10
 - macOS or Linux
 - [Boost](https://www.boost.org/) *(optional)* — enables 1024-bit integer arithmetic for large prefactors; the library builds and runs without it
 
