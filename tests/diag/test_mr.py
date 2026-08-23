@@ -165,6 +165,26 @@ def test_max_cumulant_applies_to_mixed_general_contractions():
     assert val == ref
 
 
+def test_mixed_contractions_have_canonical_port_assignment():
+    initialize_three_general_spaces()
+
+    left = w.op("L", ["a+ c+ a a"])
+    right = w.op("R", ["b+ c"])
+
+    wt = w.WickTheorem()
+    wt.set_single_threaded(True)
+    wt.set_max_cumulant(2)
+    wt.enable_mixed_general_contractions(True)
+    val = wt.contract(left @ right, minrank=0, maxrank=0)
+
+    wt.do_canonicalize_graph(False)
+    val_without_graph_canonicalization = wt.contract(
+        left @ right, minrank=0, maxrank=0
+    )
+
+    assert val == val_without_graph_canonicalization
+
+
 def test_mr1():
     initialize()
     T1aa = w.op("t", ["a+ a"])
