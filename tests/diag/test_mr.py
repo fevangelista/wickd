@@ -19,6 +19,11 @@ def initialize_two_general_spaces():
     w.add_space("b", "fermion", "general", ["p", "q", "r", "s"])
 
 
+def initialize_three_general_spaces():
+    initialize_two_general_spaces()
+    w.add_space("c", "fermion", "general", ["i", "j", "k", "l"])
+
+
 def test_cumulant_contraction_does_not_mix_general_spaces():
     initialize_two_general_spaces()
 
@@ -58,6 +63,103 @@ def test_cumulant_contraction_does_not_mix_general_spaces_at_odd_rank():
     ref = w.utils.string_to_expr(
         "L^{a0,a1,b0}_{} R^{}_{a2,b1} "
         "eta1^{b1}_{b0} eta1^{a2}_{a1} a-(a0)"
+    )
+    print_comparison(val, ref)
+    assert val == ref
+
+
+def test_cumulant_contraction_mixes_general_spaces_when_enabled():
+    initialize_two_general_spaces()
+
+    left = w.op("L", ["a+ b+"])
+    right = w.op("R", ["b a"])
+
+    wt = w.WickTheorem()
+    wt.enable_mixed_general_contractions(True)
+    val = wt.contract(left @ right, minrank=0, maxrank=0)
+    ref = w.utils.string_to_expr(
+        """-L^{}_{a0,b0} R^{a1,b1}_{} gamma1^{a0}_{b1} gamma1^{b0}_{a1}
++L^{}_{a0,b0} R^{a1,b1}_{} gamma1^{b0}_{b1} gamma1^{a0}_{a1}
++L^{}_{a0,b0} R^{a1,b1}_{} lambda2^{a0,b0}_{a1,b1}"""
+    )
+    print_comparison(val, ref)
+    assert val == ref
+
+    wt.do_canonicalize_graph(False)
+    val_without_graph_canonicalization = wt.contract(
+        left @ right, minrank=0, maxrank=0
+    )
+    assert val_without_graph_canonicalization == ref
+
+
+def test_cumulant_contraction_mixes_disjoint_general_spaces_when_enabled():
+    initialize_two_general_spaces()
+
+    left = w.op("L", ["a+ a"])
+    right = w.op("R", ["b+ b"])
+
+    wt = w.WickTheorem()
+    wt.enable_mixed_general_contractions(True)
+    val = wt.contract(left @ right, minrank=0, maxrank=0)
+    ref = w.utils.string_to_expr(
+        """L^{a1}_{a0} R^{b1}_{b0} eta1^{b0}_{a1} gamma1^{a0}_{b1}
++L^{a1}_{a0} R^{b1}_{b0} lambda2^{a0,b0}_{a1,b1}"""
+    )
+    print_comparison(val, ref)
+    assert val == ref
+
+
+def test_cumulant_contraction_mixes_general_spaces_at_odd_rank_when_enabled():
+    initialize_two_general_spaces()
+
+    left = w.op("L", ["a b a"])
+    right = w.op("R", ["a+ b+"])
+
+    wt = w.WickTheorem()
+    wt.enable_mixed_general_contractions(True)
+    val = wt.contract(left @ right, minrank=1, maxrank=1)
+    ref = w.utils.string_to_expr(
+        """L^{a0,a1,b0}_{} R^{}_{a2,b1} eta1^{b1}_{a1} eta1^{a2}_{a0} a-(b0)
+-L^{a0,a1,b0}_{} R^{}_{a2,b1} eta1^{a2}_{b0} eta1^{b1}_{a1} a-(a0)
++L^{a0,a1,b0}_{} R^{}_{a2,b1} eta1^{b1}_{b0} eta1^{a2}_{a1} a-(a0)
++1/2 L^{a0,a1,b0}_{} R^{}_{a2,b1} lambda2^{a2,b1}_{a0,a1} a-(b0)
++L^{a0,a1,b0}_{} R^{}_{a2,b1} lambda2^{a2,b1}_{a1,b0} a-(a0)"""
+    )
+    print_comparison(val, ref)
+    assert val == ref
+
+
+def test_cumulant_contraction_spans_three_general_spaces_when_enabled():
+    initialize_three_general_spaces()
+
+    left = w.op("L", ["a+ b+"])
+    right = w.op("R", ["c a"])
+
+    wt = w.WickTheorem()
+    wt.enable_mixed_general_contractions(True)
+    val = wt.contract(left @ right, minrank=0, maxrank=0)
+    ref = w.utils.string_to_expr(
+        """-L^{}_{a0,b0} R^{a1,c0}_{} gamma1^{a0}_{c0} gamma1^{b0}_{a1}
++L^{}_{a0,b0} R^{a1,c0}_{} gamma1^{b0}_{c0} gamma1^{a0}_{a1}
++L^{}_{a0,b0} R^{a1,c0}_{} lambda2^{a0,b0}_{a1,c0}"""
+    )
+    print_comparison(val, ref)
+    assert val == ref
+
+
+def test_max_cumulant_applies_to_mixed_general_contractions():
+    initialize_two_general_spaces()
+
+    left = w.op("L", ["a+ b+"])
+    right = w.op("R", ["b a"])
+
+    wt = w.WickTheorem()
+    wt.enable_mixed_general_contractions(True)
+    wt.set_max_cumulant(1)
+    val = wt.contract(left @ right, minrank=0, maxrank=0)
+    ref = w.utils.string_to_expr(
+        """-L^{}_{a0,b0} R^{a1,b1}_{} gamma1^{a0}_{b1} gamma1^{b0}_{a1}
++L^{}_{a0,b0} R^{a1,b1}_{} gamma1^{b0}_{b1} gamma1^{a0}_{a1}"""
     )
     print_comparison(val, ref)
     assert val == ref

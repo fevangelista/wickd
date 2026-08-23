@@ -69,6 +69,9 @@ public:
   /// Set the maximum cumulant level
   void set_max_cumulant(int val);
 
+  /// Turn on/off contractions that span multiple general spaces
+  void enable_mixed_general_contractions(bool val);
+
   /// Set the single-threaded mode
   void set_single_threaded(bool val);
 
@@ -89,6 +92,9 @@ private:
 
   /// The largest allowed cumulant
   int maxcumulant_ = 100;
+
+  /// Turn on/off contractions that span multiple general spaces
+  bool mixed_general_contractions_ = false;
 
   /// Turn on/off graph canonicalization
   bool do_canonicalize_graph_ = true;

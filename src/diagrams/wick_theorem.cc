@@ -20,6 +20,10 @@ void WickTheorem::set_print(PrintLevel print) { print_ = print; }
 
 void WickTheorem::set_max_cumulant(int n) { maxcumulant_ = n; }
 
+void WickTheorem::enable_mixed_general_contractions(bool val) {
+  mixed_general_contractions_ = val;
+}
+
 void WickTheorem::do_canonicalize_graph(bool val) {
   do_canonicalize_graph_ = val;
 }
