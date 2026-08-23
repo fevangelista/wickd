@@ -42,6 +42,10 @@ contractions spanning those spaces explicitly:
 wt.enable_mixed_general_contractions(True)
 ```
 
+Wick&d supports at most eight total orbital spaces across all field and space
+types. Mixed general contractions may involve any subset of the registered
+general spaces within this limit.
+
 ## Installation
 
 **From PyPI:**

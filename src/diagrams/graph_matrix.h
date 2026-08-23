@@ -15,7 +15,7 @@ class GraphMatrix {
   // Here we use an optimized way to store the graph matrix
   // We assume that we work at most with 8 different spaces, which
   // should be enough for virtually any type of application
-  static constexpr int max_spaces_ = 8;
+  static constexpr std::size_t max_spaces_ = max_orbital_spaces;
   using graph_matrix_t = std::array<std::pair<int, int>, max_spaces_>;
 
 public:

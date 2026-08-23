@@ -23,3 +23,14 @@ def test_orbital_space_exceptions():
         w.add_space("c", "fermion", "occupied", ["m", "n"])
     with pytest.raises(Exception):
         w.add_space("v", "fermion", "occupied", ["m", "n"])
+
+
+def test_orbital_space_limit():
+    w.reset_space()
+    for n, label in enumerate("abcdefgh"):
+        w.add_space(label, "fermion", "general", [f"p{n}"])
+
+    with pytest.raises(RuntimeError, match="at most 8 orbital spaces"):
+        w.add_space("i", "fermion", "general", ["p8"])
+
+    assert w.num_spaces() == 8

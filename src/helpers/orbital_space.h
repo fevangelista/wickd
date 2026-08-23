@@ -45,7 +45,7 @@ public:
   /// Set default spaces
   void reset();
 
-  /// Add an elementary space
+  /// Add an elementary space. At most max_orbital_spaces may be registered.
   void add_space(char label, FieldType field_type, SpaceType space_type,
                  const std::vector<std::string> &indices,
                  const std::vector<char> &elementary_spaces = {});
