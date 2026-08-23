@@ -34,6 +34,14 @@ expr = wt.contract(F_T1, minrank=0, maxrank=4)
 print(f"F T_{{1}} = {expr.latex()}")
 ```
 
+When a reference contains multiple general orbital spaces, contractions are
+confined to each individual space by default. Enable density and cumulant
+contractions spanning those spaces explicitly:
+
+```python
+wt.enable_mixed_general_contractions(True)
+```
+
 ## Installation
 
 **From PyPI:**
