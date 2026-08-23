@@ -20,6 +20,7 @@ public:
   /// The number of second quantization operator contracted
   int num_ops() const;
 
+  /// Return the sorted unique spaces touched by this contraction
   std::vector<int> spaces_in_elementary_contraction() const;
 };
 

@@ -124,8 +124,8 @@ WickTheorem::generate_elementary_contractions(const OperatorProduct &ops) {
   }
 
   if (general_spaces.size() > 1) {
-    // Stage mixed-space contractions separately until the evaluator can map
-    // all participating spaces onto explicit operator positions.
+    // Stage mixed-space contractions separately until graph canonicalization
+    // handles two-leg contractions whose legs belong to different spaces.
     std::vector<ElementaryContraction> mixed_contr_vec;
     elementary_contractions_general_mixed(ops, general_spaces, mixed_contr_vec);
     PRINT(PrintLevel::Summary,
