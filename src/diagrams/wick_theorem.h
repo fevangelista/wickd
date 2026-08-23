@@ -122,6 +122,11 @@ private:
       const OperatorProduct &ops, int s,
       std::vector<ElementaryContraction> &contr_vec);
 
+  /// Generates elementary contractions that span multiple general spaces
+  void elementary_contractions_general_mixed(
+      const OperatorProduct &ops, const std::vector<int> &spaces,
+      std::vector<ElementaryContraction> &contr_vec);
+
   //
   // Functions for step 2. of the Wick's theorem algorithm
   // implemented in wich_theorem_composite_contractions.cc
