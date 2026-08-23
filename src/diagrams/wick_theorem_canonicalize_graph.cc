@@ -79,23 +79,28 @@ bool do_contractions_commute(int i, int j, const OperatorProduct &ops,
                              const CompositeContraction &contractions) {
   // contractions commute if rearranging two operators does not change the final
   // result
-  bool do_commute = true;
   // loop over all elementary contractions
   for (const auto &el_contr : contractions) {
-    // loop over all orbital spaces
-    for (int s = 0; s < orbital_subspaces->num_spaces(); ++s) {
-      // check if this is a single contraction
-      if (el_contr.num_ops() == 2) {
-        if (el_contr[i].cre(s) * el_contr[j].ann(s) > 0) {
-          do_commute = false;
-        }
-        if (el_contr[i].ann(s) * el_contr[j].cre(s) > 0) {
-          do_commute = false;
-        }
+    // Check if this is a single contraction. Its creation and annihilation
+    // legs may belong to different general spaces, so determine the role of
+    // each operator across all spaces before comparing them.
+    if (el_contr.num_ops() == 2) {
+      int i_cre = 0;
+      int i_ann = 0;
+      int j_cre = 0;
+      int j_ann = 0;
+      for (int s = 0; s < orbital_subspaces->num_spaces(); ++s) {
+        i_cre += el_contr[i].cre(s);
+        i_ann += el_contr[i].ann(s);
+        j_cre += el_contr[j].cre(s);
+        j_ann += el_contr[j].ann(s);
+      }
+      if (i_cre * j_ann > 0 || i_ann * j_cre > 0) {
+        return false;
       }
     }
   }
-  return do_commute;
+  return true;
 }
 
 bool graph_less(const std::pair<int, int> &l, const std::pair<int, int> &r,
