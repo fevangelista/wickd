@@ -55,8 +55,18 @@ void WickTheorem::generate_contractions_backtrack(
     std::vector<GraphMatrix> &free_graph_matrix_vec, const int minrank,
     const int maxrank) {
 
+  const int free_rank = sum_num_ops(free_graph_matrix_vec);
+
   // process this contraction
-  process_contraction(a, k, free_graph_matrix_vec, minrank, maxrank);
+  process_contraction(a, k, free_graph_matrix_vec, free_rank, minrank,
+                      maxrank);
+
+  // Every additional contraction removes operator legs. Once the current
+  // solution reaches the minimum requested rank, all of its descendants fall
+  // below that rank and cannot contribute.
+  if (free_rank <= minrank) {
+    return;
+  }
 
   // build a list of candidate contractions to add to this solution
   k = k + 1;
@@ -74,10 +84,9 @@ void WickTheorem::generate_contractions_backtrack(
 
 void WickTheorem::process_contraction(
     const std::vector<int> &a, int k,
-    const std::vector<GraphMatrix> &free_graph_matrix_vec, const int minrank,
-    const int maxrank) {
-  int num_ops = sum_num_ops(free_graph_matrix_vec);
-  if ((num_ops >= minrank) and (num_ops <= maxrank)) {
+    const std::vector<GraphMatrix> &free_graph_matrix_vec, const int free_rank,
+    const int minrank, const int maxrank) {
+  if ((free_rank >= minrank) and (free_rank <= maxrank)) {
     contractions_.push_back(std::vector<int>(a.begin(), a.begin() + k));
     ncontractions_++;
     PRINT(
@@ -85,7 +94,7 @@ void WickTheorem::process_contraction(
         for (const auto &free_graph_matrix
              : free_graph_matrix_vec) { free_ops += free_graph_matrix; };
         cout << fmt::format("\n  {:5d}    {:3d}    ", ncontractions_ + 1,
-                            free_ops.num_ops());
+                            free_rank);
         for (int i = 0; i < k; ++i) { cout << fmt::format(" {:3d}", a[i]); };
         cout << std::string(std::max(24 - 4 * k, 2), ' ') << free_ops;)
   }

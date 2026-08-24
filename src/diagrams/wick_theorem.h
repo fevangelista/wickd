@@ -69,6 +69,9 @@ public:
   /// Set the maximum cumulant level
   void set_max_cumulant(int val);
 
+  /// Turn on/off contractions that span multiple general spaces
+  void enable_mixed_general_contractions(bool val);
+
   /// Set the single-threaded mode
   void set_single_threaded(bool val);
 
@@ -89,6 +92,9 @@ private:
 
   /// The largest allowed cumulant
   int maxcumulant_ = 100;
+
+  /// Turn on/off contractions that span multiple general spaces
+  bool mixed_general_contractions_ = false;
 
   /// Turn on/off graph canonicalization
   bool do_canonicalize_graph_ = true;
@@ -122,6 +128,11 @@ private:
       const OperatorProduct &ops, int s,
       std::vector<ElementaryContraction> &contr_vec);
 
+  /// Generates elementary contractions that span multiple general spaces
+  void elementary_contractions_general_mixed(
+      const OperatorProduct &ops, const std::vector<int> &spaces,
+      std::vector<ElementaryContraction> &contr_vec);
+
   //
   // Functions for step 2. of the Wick's theorem algorithm
   // implemented in wich_theorem_composite_contractions.cc
@@ -144,7 +155,8 @@ private:
   void
   process_contraction(const std::vector<int> &a, int k,
                       const std::vector<GraphMatrix> &free_graph_matrix_vec,
-                      const int minrank, const int maxrank);
+                      const int free_rank, const int minrank,
+                      const int maxrank);
 
   /// Return a vector of indices of elementary contractions that can be
   /// added to the current backtracking solution. All candidates generated

@@ -1,8 +1,12 @@
 #pragma once
 
+#include <cstddef>
 #include <vector>
 
 #include <bitset>
+
+/// Maximum number of orbital spaces supported by graph-matrix storage.
+inline constexpr std::size_t max_orbital_spaces = 8;
 
 #define DEBUG_PRINT 0
 

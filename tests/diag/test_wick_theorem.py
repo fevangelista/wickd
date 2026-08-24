@@ -63,6 +63,19 @@ def test_wick_theorem_3():
     assert test == ref
 
 
+def test_wick_theorem_minrank_boundary():
+    """A solution at minrank is kept before its descendants are pruned."""
+    initialize()
+    A = w.op("a", ["o+"])
+    B = w.op("b", ["o"])
+
+    wt = w.WickTheorem()
+    test = wt.contract(w.rational(1), A @ B, 2, 2)
+    ref = w.expression("a^{}_{o_0} b^{o_1}_{} a+(o_0) a-(o_1)")
+    print_comparison(test, ref.canonicalize())
+    assert test == ref
+
+
 def test_wick_theorem_4():
     """Test {o+ o+} {o}"""
     initialize()

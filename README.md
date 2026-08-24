@@ -34,6 +34,18 @@ expr = wt.contract(F_T1, minrank=0, maxrank=4)
 print(f"F T_{{1}} = {expr.latex()}")
 ```
 
+When a reference contains multiple general orbital spaces, contractions are
+confined to each individual space by default. Enable density and cumulant
+contractions spanning those spaces explicitly:
+
+```python
+wt.enable_mixed_general_contractions(True)
+```
+
+Wick&d supports at most eight total orbital spaces across all field and space
+types. Mixed general contractions may involve any subset of the registered
+general spaces within this limit.
+
 ## Installation
 
 **From PyPI:**
@@ -51,7 +63,7 @@ pip install --no-build-isolation -ve .
 
 ## Requirements
 
-- Python ≥ 3.9
+- Python ≥ 3.10
 - macOS or Linux
 - [Boost](https://www.boost.org/) *(optional)* — enables 1024-bit integer arithmetic for large prefactors; the library builds and runs without it
 

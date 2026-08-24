@@ -41,6 +41,10 @@ void export_WickTheorem(nb::module_ &m) {
            "summary,detailed, all])")
       .def("set_max_cumulant", &WickTheorem::set_max_cumulant, "val"_a,
            "Set the maximum cumulant level")
+      .def("enable_mixed_general_contractions",
+           &WickTheorem::enable_mixed_general_contractions, "val"_a,
+           "Turn on/off contractions that span multiple general spaces "
+           "(default: false)")
       .def("set_single_threaded", &WickTheorem::set_single_threaded, "val"_a,
            "Set the single-threaded mode (default: false)")
       .def("do_canonicalize_graph", &WickTheorem::do_canonicalize_graph,

@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "../wickd-def.h"
 #include "helpers.h"
 #include "orbital_space.h"
 
@@ -75,6 +76,12 @@ void OrbitalSpaceInfo::add_space(char label, FieldType field_type,
                                  SpaceType space_type,
                                  const std::vector<std::string> &indices,
                                  const std::vector<char> &elementary_spaces) {
+  if (space_info_.size() >= max_orbital_spaces) {
+    throw std::runtime_error(
+        "add_space: Wick&d supports at most " +
+        std::to_string(max_orbital_spaces) + " orbital spaces.");
+  }
+
   if (label_to_pos_.count(label) != 0) {
     throw std::runtime_error("add_space: Orbitals space label \"" +
                              std::string(1, label) +

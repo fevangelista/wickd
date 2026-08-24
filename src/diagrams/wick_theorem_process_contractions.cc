@@ -86,7 +86,8 @@ Expression WickTheorem::process_contractions(scalar_t factor,
       const auto [best_ops, best_contractions, sign] =
           do_canonicalize_graph_
               ? canonicalize_contraction_graph(ops, contraction)
-              : std::make_tuple(ops, contraction, scalar_t(1));
+              : std::make_tuple(ops, canonical_contraction_order(contraction),
+                                scalar_t(1));
       timers_["canonicalize_contraction_graph"] += tc.get();
 
       timer te;
@@ -173,7 +174,8 @@ Expression WickTheorem::process_single_contraction(
     const auto [best_ops, best_contractions, sign] =
         do_canonicalize_graph_
             ? canonicalize_contraction_graph(ops, contraction)
-            : std::make_tuple(ops, contraction, scalar_t(1));
+            : std::make_tuple(ops, canonical_contraction_order(contraction),
+                              scalar_t(1));
     timers_["canonicalize_contraction_graph"] += tc.get();
 
     timer te;
@@ -265,9 +267,13 @@ WickTheorem::evaluate_contraction(const OperatorProduct &ops,
     // a bit array to keep track of which operators are contracted
     std::vector<bool> bit_map(sqops.size(), false);
 
-    // Find the rank and space of this contraction
+    // Find the rank and spaces of this contraction
     int rank = contraction.num_ops();
-    int s = contraction.spaces_in_elementary_contraction()[0];
+    const auto spaces = contraction.spaces_in_elementary_contraction();
+    if (spaces.empty()) {
+      throw std::runtime_error(
+          "WickTheorem::evaluate_contraction: empty elementary contraction");
+    }
     nsqops_contracted += rank;
 
     // find the position of the creation operators
@@ -276,6 +282,12 @@ WickTheorem::evaluate_contraction(const OperatorProduct &ops,
     // find the position of the annihilation operators
     std::vector<int> pos_ann_sqops =
         elements_vec_to_pos(contraction, ops_offset, op_map, false);
+
+    if (static_cast<int>(pos_cre_sqops.size() + pos_ann_sqops.size()) != rank) {
+      throw std::runtime_error(
+          "WickTheorem::evaluate_contraction: mapped operator count does not "
+          "match the elementary contraction rank");
+    }
 
     // mark the creation operators contracted and their order
     for (int c : pos_cre_sqops) {
@@ -290,7 +302,21 @@ WickTheorem::evaluate_contraction(const OperatorProduct &ops,
       sorted_position += 1;
     }
 
-    SpaceType dmstruc = orbital_subspaces->space_type(s);
+    // Occupied and unoccupied contractions act in exactly one space. A
+    // contraction may span several spaces only when all of them are general.
+    SpaceType dmstruc = orbital_subspaces->space_type(spaces[0]);
+    if (spaces.size() > 1) {
+      const bool all_general =
+          std::all_of(spaces.begin(), spaces.end(), [](int s) {
+            return orbital_subspaces->space_type(s) == SpaceType::General;
+          });
+      if (not all_general) {
+        throw std::runtime_error(
+            "WickTheorem::evaluate_contraction: a multi-space contraction "
+            "may contain only general spaces");
+      }
+      dmstruc = SpaceType::General;
+    }
 
     // Pairwise contractions creation-annihilation:
     // ________
@@ -487,34 +513,43 @@ std::vector<int> WickTheorem::elements_vec_to_pos(
 
   std::vector<int> result;
 
-  int s = elements_vec.spaces_in_elementary_contraction()[0];
+  const auto spaces = elements_vec.spaces_in_elementary_contraction();
 
   PRINT(PrintLevel::All, cout << "\n  GraphMatrix to position:" << endl;);
 
-  // Loop over all graph matrices
+  // Loop over all graph matrices. Creation operators are laid out with spaces
+  // in ascending order, while annihilation operators use descending space
+  // order. This is the same ordering used by contraction_tensors_sqops.
   for (int v = 0; v < elements_vec.size(); v++) {
     const auto &graph_matrix = elements_vec[v];
-    int nops = creation ? graph_matrix.cre(s) : graph_matrix.ann(s);
-    // assign the operator indices
-    int ops_off = creation ? ops_offset[v].cre(s) : ops_offset[v].ann(s);
-    for (int i = 0; i < nops; i++) {
-      // find the operator corresponding to this leg
-      auto key = make_op_key(v, s, creation, ops_off + i);
-      if (op_map.count(key) == 0) {
-        PRINT(PrintLevel::All, print_key(key, -1););
-        cout << " NOT FOUND!!!" << endl;
-        exit(1);
-      } else {
-        int sqop_pos = op_map[key];
+    for (int p = 0; p < static_cast<int>(spaces.size()); ++p) {
+      const int space_pos =
+          creation ? p : static_cast<int>(spaces.size()) - p - 1;
+      const int s = spaces[space_pos];
+      const int nops = creation ? graph_matrix.cre(s) : graph_matrix.ann(s);
+
+      // Assign the explicit operator positions for this block and space. The
+      // offset records legs already consumed by earlier contractions.
+      const int ops_off =
+          creation ? ops_offset[v].cre(s) : ops_offset[v].ann(s);
+      for (int i = 0; i < nops; i++) {
+        auto key = make_op_key(v, s, creation, ops_off + i);
+        if (op_map.count(key) == 0) {
+          PRINT(PrintLevel::All, print_key(key, -1););
+          throw std::runtime_error(
+              "WickTheorem::elements_vec_to_pos: operator position not found");
+        }
+        const int sqop_pos = op_map[key];
         result.push_back(sqop_pos);
         PRINT(PrintLevel::All, print_key(key, sqop_pos););
       }
-    }
-    // update the creator's offset
-    if (creation) {
-      ops_offset[v].set_cre(s, ops_off + nops);
-    } else {
-      ops_offset[v].set_ann(s, ops_off + nops);
+
+      // Update the offset independently for every operator and space.
+      if (creation) {
+        ops_offset[v].set_cre(s, ops_off + nops);
+      } else {
+        ops_offset[v].set_ann(s, ops_off + nops);
+      }
     }
   }
   return result;

@@ -42,7 +42,8 @@ void export_OrbitalSpaceInfo(nb::module_ &m) {
       "elementary_spaces"_a = std::vector<char>(),
       "Add an orbital space. `field_type` can be any of "
       "[fermion,boson]. `space_type` can be any of "
-      "[occupied,unoccupied,general]");
+      "[occupied,unoccupied,general]. At most eight total orbital spaces "
+      "may be registered");
 
   m.def("num_spaces", []() { return orbital_subspaces->num_spaces(); });
 }
