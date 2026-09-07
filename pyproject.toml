@@ -4,8 +4,8 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "wickd"
-version = "1.2.2"
-description = "An example minimal project that compiles bindings using nanobind and scikit-build"
+version = "1.3.0"
+description = "A Wick theorem kernel written in C++ and interfaced with Python"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
