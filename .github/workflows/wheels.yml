@@ -53,7 +53,8 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: dist-${{ matrix.os }}
-          path: dist
+          path: wheelhouse/*.whl
+          if-no-files-found: error
 
   upload_all:
     name: Upload if release
